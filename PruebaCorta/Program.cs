@@ -11,7 +11,7 @@ options.UseSqlServer(builder.Configuration.GetConnectionString("conn")));
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie((o) =>
 {
     o.LoginPath = new PathString("/Acceso/Login");
-    o.AccessDeniedPath = new PathString("/Empleados/login");
+    o.AccessDeniedPath = new PathString("/Acceso/login");
     o.ExpireTimeSpan = TimeSpan.FromHours(8);
     o.SlidingExpiration = true;
     o.Cookie.HttpOnly = true;

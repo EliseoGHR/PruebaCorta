@@ -1,4 +1,7 @@
-﻿<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+﻿@{
+    Layout = "_LoginLayout";
+}
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <link href="~/css/login.css" rel="stylesheet" />
@@ -21,7 +24,15 @@
                     <span asp-validation-for="NombreUsuario" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <input asp-for="Contrasena" type="password" class="form-control" placeholder="Contraseña" />
+                    <div class="input-group">
+                        <input asp-for="Contrasena" type="password" class="form-control" placeholder="Contraseña" id="Password" />
+                        <div class="input-group-append">
+                            <button type="button" class="btn btn-outline" id="togglePassword" style="border:0px;">
+                                <svg id="eyeIconClosed" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(0, 0, 0, 1);"><path d="M20 12c0-1.103-.897-2-2-2h-1V7c0-2.757-2.243-5-5-5S7 4.243 7 7v3H6c-1.103 0-2 .897-2 2v8c0 1.103.897 2 2 2h12c1.103 0 2-.897 2-2v-8zM9 7c0-1.654 1.346-3 3-3s3 1.346 3 3v3H9V7z"></path></svg>
+                                <svg id="eyeIconOpen" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(0, 0, 0, 1); display:none;"><path d="M17 8V7c0-2.757-2.243-5-5-5S7 4.243 7 7v3H6c-1.103 0-2 .897-2 2v8c0 1.103.897 2 2 2h12c1.103 0 2-.897 2-2v-8c0-1.103-.897-2-2-2H9V7c0-1.654 1.346-3 3-3s3 1.346 3 3v1h2z"></path></svg>
+                            </button>
+                        </div>
+                    </div>
                     <span asp-validation-for="Contrasena" class="text-danger"></span>
                 </div>
 
@@ -40,7 +51,7 @@
                     ¿No tienes una Usuario? <a href="@Url.Action("Registrar","Acceso")" class="ForgetPwd">Registrarse</a>
                 </div>
             </form>
-         </div>
+        </div>
     </div>
 </div>
 
@@ -48,6 +59,25 @@
 
 
 
+
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        document.getElementById("togglePassword").addEventListener("click", function () {
+            var passwordInput = document.getElementById("Password");
+            var eyeIconClosed = document.getElementById("eyeIconClosed");
+            var eyeIconOpen = document.getElementById("eyeIconOpen");
+            if (passwordInput.type === "password") {
+                passwordInput.type = "text";
+                eyeIconClosed.style.display = "none";
+                eyeIconOpen.style.display = "inline";
+            } else {
+                passwordInput.type = "password";
+                eyeIconClosed.style.display = "inline";
+                eyeIconOpen.style.display = "none";
+            }
+        });
+    </script>
+
 }
