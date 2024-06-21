@@ -1,0 +1,29 @@
+﻿@model IEnumerable<PruebaCorta.Models.Respuesta>
+
+@{
+    ViewData["Title"] = "VerRespuesta";
+}
+
+<h2>Respuestas</h2>
+
+<a href='@Url.Action("Index", "Home")' class="btn btn-secondary">Volver</a>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Repuestas</th>
+            <th>Fecha</th>
+            <th>Usuario</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var respuesta in Model)
+        {
+            <tr>
+                <td>@respuesta.Texto</td>
+                <td>@respuesta.FechaCreacion.ToString("dd/MM/yyyy")</td>
+                <td>@respuesta.Usuario.NombreUsuario</td>
+            </tr>
+        }
+    </tbody>
+</table>

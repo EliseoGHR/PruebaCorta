@@ -1,0 +1,25 @@
+﻿@model PruebaCorta.Models.Respuesta
+
+@{
+    ViewData["Title"] = "Responder Pregunta";
+}
+
+<h2>Responder Pregunta</h2>
+
+<form asp-action="ResponderPregunta" method="post">
+    <input type="hidden" name="preguntaId" value="@ViewBag.PreguntaId" />
+    <div class="form-group">
+        <label for="texto">Respuesta</label>
+        <textarea class="form-control" id="texto" name="texto" rows="3"></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Enviar</button>
+</form>
+
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

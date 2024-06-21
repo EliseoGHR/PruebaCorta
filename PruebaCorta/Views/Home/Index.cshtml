@@ -1,8 +1,45 @@
-﻿@{
+﻿@model IEnumerable<PruebaCorta.Models.Pregunta>
+@{
     ViewData["Title"] = "Home Page";
 }
 
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <button onclick="location.href='@Url.Action("HacerPregunta", "Home")'" class="btn btn-primary">Hacer una pregunta</button>
 </div>
+
+<h2>Lista de Preguntas</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Preguntas</th>
+            <th>Fecha</th>
+            <th>Usuario</th>
+            <th>Estado</th>
+            <th>Funciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var pregunta in Model)
+        {
+            <tr>
+                <td>@pregunta.Texto</td>
+                <td>@pregunta.FechaCreacion.ToString("dd/MM/yyyy")</td>
+                <td>@pregunta.Usuario.NombreUsuario</td>
+                <td>@(pregunta.Estatus == 1 ? "Pendiente" : "Resuelta")</td>
+                <td>
+                    @if (pregunta.Estatus == 1)
+                    {
+                        <a class="btn btn-primary" href='@Url.Action("VerRespuesta", "Home", new { id = pregunta.Id })'>Ver respuestas</a>
+                        <a class="btn btn-secondary" href='@Url.Action("ResponderPregunta", "Home", new { id = pregunta.Id })'>Responder</a>
+                    }
+                    @if (pregunta.UsuarioId == int.Parse(User.FindFirst("Id").Value) && pregunta.Estatus == 1)
+                    {
+                        <a class="btn btn-danger" href='@Url.Action("CerrarPregunta", "Home", new { id = pregunta.Id })'>Cerrar</a>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

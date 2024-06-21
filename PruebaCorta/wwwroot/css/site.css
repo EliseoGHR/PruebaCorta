@@ -16,3 +16,12 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+.nav-menu {
+    display: flex;
+    align-items: center;
+}
+
+.nav-logout {
+    margin-left: auto; /* Empuja el botón de "Cerrar Sesión" al extremo derecho */
+}
