@@ -33,14 +33,10 @@ namespace PruebaCorta.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(Usuario usuario, string ReturnUrl)
         {
-            if (string.IsNullOrEmpty(usuario.Contrasena))
-            {
-                ViewBag.Error = "Credenciales incorrectas";
-                ViewBag.pReturnUrl = ReturnUrl;
-                return View(usuario);
-            }
+            
 
             usuario.Contrasena = CalcularHashMD5(usuario.Contrasena);
+            int resultado;
 
             using (SqlConnection cn = new SqlConnection(conn))
             {
@@ -49,17 +45,26 @@ namespace PruebaCorta.Controllers
                 cmd.Parameters.AddWithValue("@NombreUsuario", usuario.NombreUsuario);
                 cmd.Parameters.AddWithValue("@Contrasena", usuario.Contrasena);
 
+                SqlParameter outputParameter = new SqlParameter
+                {
+                    ParameterName = "@Resultado",
+                    SqlDbType = SqlDbType.Int,
+                    Direction = ParameterDirection.Output
+                };
+                cmd.Parameters.Add(outputParameter);
+
                 cn.Open();
-                usuario.Id = Convert.ToInt32(cmd.ExecuteScalar().ToString());
+                await cmd.ExecuteNonQueryAsync();
+                resultado = (int)outputParameter.Value;
             }
 
-            if (usuario.Id != 0)
+            if (resultado > 0)
             {
                 var claims = new[]
                 {
-                    new Claim(ClaimTypes.Name, usuario.NombreUsuario),
-                    new Claim("Id", usuario.Id.ToString())
-                };
+            new Claim(ClaimTypes.Name, usuario.NombreUsuario),
+            new Claim("Id", resultado.ToString())
+        };
 
                 var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity), new AuthenticationProperties { IsPersistent = true });
@@ -69,10 +74,16 @@ namespace PruebaCorta.Controllers
                 else
                     return RedirectToAction("Index", "Home");
             }
+            else if (resultado == 0)
+            {
+                ViewData["Mensaje"] = "Credenciales incorrectas";
+               
+                return View(usuario);
+            }
             else
             {
-                ViewBag.Error = "Usuario no encontrado";
-                ViewBag.pReturnUrl = ReturnUrl;
+                ViewData["Mensaje"] = "Usuario no encontrado";
+              
                 return View(usuario);
             }
 
