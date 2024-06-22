@@ -1,0 +1,141 @@
+-- Procedimiento para cerrar una pregunta
+CREATE PROCEDURE CerrarPregunta
+    @PreguntaId INT
+AS
+BEGIN
+    UPDATE Preguntas
+    SET Estatus = 0
+    WHERE Id = @PreguntaId;
+END
+GO
+
+-- Procedimiento para hacer una pregunta
+CREATE PROCEDURE HacerPregunta
+    @Texto NVARCHAR(300),
+    @FechaCreacion DATETIME,
+    @Estatus BIT,
+    @UsuarioId INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    INSERT INTO Preguntas (Texto, FechaCreacion, Estatus, UsuarioId)
+    VALUES (@Texto, @FechaCreacion, @Estatus, @UsuarioId);
+
+    SELECT SCOPE_IDENTITY() AS Id, u.NombreUsuario
+    FROM Preguntas p
+    JOIN Usuarios u ON p.UsuarioId = u.Id
+    WHERE p.Id = SCOPE_IDENTITY();
+END
+GO
+
+-- Procedimiento para obtener el usuario creador de una pregunta
+CREATE PROCEDURE ObtenerDePreguntaUsuarioCreador
+    @PreguntaId INT
+AS
+BEGIN
+    SELECT UsuarioId
+    FROM Preguntas
+    WHERE Id = @PreguntaId;
+END
+GO
+
+-- Procedimiento para obtener todas las preguntas
+CREATE PROCEDURE ObtenerPreguntas
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT p.Id, p.Texto, p.FechaCreacion, p.Estatus, p.UsuarioId, u.NombreUsuario
+    FROM Preguntas p
+    JOIN Usuarios u ON p.UsuarioId = u.Id
+    ORDER BY p.FechaCreacion DESC;
+END
+GO
+
+-- Procedimiento para obtener respuestas por pregunta
+CREATE PROCEDURE ObtenerRespuestasPorPregunta
+    @PreguntaId INT
+AS
+BEGIN
+    SELECT r.Id, r.Texto, r.FechaCreacion, r.UsuarioId, u.NombreUsuario
+    FROM Respuestas r
+    JOIN Usuarios u ON r.UsuarioId = u.Id
+    WHERE r.PreguntaId = @PreguntaId
+    ORDER BY r.FechaCreacion DESC;
+END
+GO
+
+-- Procedimiento para registrar un nuevo usuario
+CREATE PROCEDURE RegistrarUsuario
+(
+    @NombreUsuario VARCHAR(50),
+    @Contrasena VARCHAR(100),
+    @Registrado BIT OUTPUT,
+    @Mensaje VARCHAR(100) OUTPUT
+)
+AS
+BEGIN
+    SET NOCOUNT ON;
+    
+    -- Validar que el nombre de usuario no esté duplicado
+    IF NOT EXISTS (SELECT * FROM Usuarios WHERE NombreUsuario = @NombreUsuario)
+    BEGIN
+        -- Insertar el nuevo usuario
+        INSERT INTO Usuarios (NombreUsuario, Contrasena) VALUES (@NombreUsuario, @Contrasena);
+        SET @Registrado = 1;
+        SET @Mensaje = 'Usuario registrado';
+    END
+    ELSE
+    BEGIN
+        -- Si el nombre de usuario ya existe, establecer los valores de salida correspondientes
+        SET @Registrado = 0;
+        SET @Mensaje = 'El nombre de usuario ya existe';
+    END
+END
+GO
+
+-- Procedimiento para responder una pregunta
+CREATE PROCEDURE ResponderPregunta
+    @Texto NVARCHAR(MAX),
+    @FechaCreacion DATETIME,
+    @PreguntaId INT,
+    @UsuarioId INT
+AS
+BEGIN
+    INSERT INTO Respuestas (Texto, FechaCreacion, PreguntaId, UsuarioId)
+    VALUES (@Texto, @FechaCreacion, @PreguntaId, @UsuarioId);
+END
+GO
+
+-- Procedimiento para validar usuario
+CREATE PROCEDURE ValidarUsuario
+    @NombreUsuario NVARCHAR(50),
+    @Contrasena NVARCHAR(50),
+    @Resultado INT OUTPUT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    DECLARE @UsuarioId INT;
+
+    SELECT @UsuarioId = Id
+    FROM Usuarios
+    WHERE NombreUsuario = @NombreUsuario;
+
+    IF @UsuarioId IS NULL
+    BEGIN
+        SET @Resultado = -1; -- Usuario no encontrado
+        RETURN;
+    END
+
+    IF EXISTS (SELECT 1 FROM Usuarios WHERE Id = @UsuarioId AND Contrasena = @Contrasena)
+    BEGIN
+        SET @Resultado = @UsuarioId; -- Usuario y contraseña correctos
+    END
+    ELSE
+    BEGIN
+        SET @Resultado = 0; -- Contraseña incorrecta
+    END
+END
+GO
