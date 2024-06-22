@@ -97,7 +97,7 @@ GO
 
 -- Procedimiento para responder una pregunta
 CREATE PROCEDURE ResponderPregunta
-    @Texto NVARCHAR(MAX),
+    @Texto NVARCHAR(500),
     @FechaCreacion DATETIME,
     @PreguntaId INT,
     @UsuarioId INT
