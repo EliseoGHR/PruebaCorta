@@ -27,9 +27,10 @@
                     <div class="input-group">
                         <input asp-for="Contrasena" type="password" class="form-control" placeholder="Contraseña" id="Password" />
                         <div class="input-group-append">
+
                             <button type="button" class="btn btn-outline" id="togglePassword" style="border:0px;">
-                                <svg id="eyeIconClosed" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(0, 0, 0, 1);"><path d="M20 12c0-1.103-.897-2-2-2h-1V7c0-2.757-2.243-5-5-5S7 4.243 7 7v3H6c-1.103 0-2 .897-2 2v8c0 1.103.897 2 2 2h12c1.103 0 2-.897 2-2v-8zM9 7c0-1.654 1.346-3 3-3s3 1.346 3 3v3H9V7z"></path></svg>
-                                <svg id="eyeIconOpen" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(0, 0, 0, 1); display:none;"><path d="M17 8V7c0-2.757-2.243-5-5-5S7 4.243 7 7v3H6c-1.103 0-2 .897-2 2v8c0 1.103.897 2 2 2h12c1.103 0 2-.897 2-2v-8c0-1.103-.897-2-2-2H9V7c0-1.654 1.346-3 3-3s3 1.346 3 3v1h2z"></path></svg>
+                                <img id="eyeIconClosed" src="~/img/eye_closed.svg" width="24" height="24" style="display: none;" />
+                                <img id="eyeIconOpen" src="~/img/eye.svg" width="24" height="24" />
                             </button>
                         </div>
                     </div>
@@ -40,9 +41,10 @@
                     <div class="input-group">
                         <input asp-for="ConfirmarContrasena" type="password" class="form-control" placeholder="Confirmar contraseña" id="ConfirmPassword" />
                         <div class="input-group-append">
+
                             <button type="button" class="btn btn-outline" id="toggleConfirmPassword" style="border:0px;">
-                                <svg id="eyeIconConfirmClosed" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(0, 0, 0, 1);"><path d="M20 12c0-1.103-.897-2-2-2h-1V7c0-2.757-2.243-5-5-5S7 4.243 7 7v3H6c-1.103 0-2 .897-2 2v8c0 1.103.897 2 2 2h12c1.103 0 2-.897 2-2v-8zM9 7c0-1.654 1.346-3 3-3s3 1.346 3 3v3H9V7z"></path></svg>
-                                <svg id="eyeIconConfirmOpen" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(0, 0, 0, 1); display:none;"><path d="M17 8V7c0-2.757-2.243-5-5-5S7 4.243 7 7v3H6c-1.103 0-2 .897-2 2v8c0 1.103.897 2 2 2h12c1.103 0 2-.897 2-2v-8c0-1.103-.897-2-2-2H9V7c0-1.654 1.346-3 3-3s3 1.346 3 3v1h2z"></path></svg>
+                                <img id="eyeIconConfirmClosed" src="~/img/eye_closed.svg" width="24" height="24" style="display: none;" />
+                                <img id="eyeIconConfirmOpen" src="~/img/eye.svg" width="24" height="24" />
                             </button>
                         </div>
                     </div>
