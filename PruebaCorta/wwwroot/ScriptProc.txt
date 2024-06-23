@@ -139,3 +139,13 @@ BEGIN
     END
 END
 GO
+
+CREATE PROCEDURE ReabrirPregunta
+    @PreguntaId INT
+AS
+BEGIN
+    UPDATE Preguntas
+    SET Estatus = 1
+    WHERE Id = @PreguntaId;
+END
+GO
