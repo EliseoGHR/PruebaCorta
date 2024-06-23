@@ -141,13 +141,10 @@ namespace PruebaCorta.Controllers
         {
             using (MD5 md5 = MD5.Create())
             {
-                // Convierte la cadena de texto a bytes
                 byte[] inputBytes = Encoding.UTF8.GetBytes(texto);
 
-                // Calcula el hash MD5 de los bytes
                 byte[] hashBytes = md5.ComputeHash(inputBytes);
 
-                // Convierte el hash a una cadena hexadecimal
                 StringBuilder sb = new StringBuilder();
                 for (int i = 0; i < hashBytes.Length; i++)
                 {

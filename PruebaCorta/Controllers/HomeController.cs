@@ -86,8 +86,8 @@ namespace PruebaCorta.Controllers
                         {
                             Texto = Texto,
                             FechaCreacion = DateTime.Now,
-                            Estatus = 1, // Asumimos que una nueva pregunta está activa (1)
-                            UsuarioId = int.Parse(User.FindFirst("Id").Value) // Obtener el ID del usuario logueado
+                            Estatus = 1, 
+                            UsuarioId = int.Parse(User.FindFirst("Id").Value) 
                         };
 
                         command.Parameters.AddWithValue("@Texto", nuevaPregunta.Texto);
@@ -104,7 +104,6 @@ namespace PruebaCorta.Controllers
                 }
                 catch (Exception ex)
                 {
-                    // Agregar registro de errores
                     Console.WriteLine(ex.Message);
                     ViewBag.ErrorMessage = "Ocurrió un error al insertar la pregunta.";
                 }
@@ -215,14 +214,12 @@ namespace PruebaCorta.Controllers
                 {
                     connection.Open();
 
-                    // Llamar al procedimiento almacenado para obtener el UsuarioId del creador de la pregunta
                     SqlCommand cmd = new SqlCommand("ObtenerDePreguntaUsuarioCreador", connection);
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@PreguntaId", id);
 
                     int creadorId = (int)cmd.ExecuteScalar();
 
-                    // Verificar si el usuario actual es el creador de la pregunta
                     if (creadorId == int.Parse(User.FindFirst("Id").Value))
                     {
                         SqlCommand cerrarCmd = new SqlCommand("CerrarPregunta", connection);
@@ -233,14 +230,13 @@ namespace PruebaCorta.Controllers
                     }
                     else
                     {
-                        return Unauthorized(); // El usuario no está autorizado para cerrar esta pregunta
+                        return Unauthorized(); 
                     }
                 }
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                // Manejar la excepción según sea necesario
             }
 
             return RedirectToAction("Index");
