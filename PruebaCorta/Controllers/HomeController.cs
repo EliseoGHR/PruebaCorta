@@ -241,10 +241,44 @@ namespace PruebaCorta.Controllers
 
             return RedirectToAction("Index");
         }
-    
 
 
 
+        public async Task<ActionResult> ReabrirPregunta(int id)
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(conn))
+                {
+                    connection.Open();
+
+                    SqlCommand cmd = new SqlCommand("ObtenerDePreguntaUsuarioCreador", connection);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@PreguntaId", id);
+
+                    int creadorId = (int)cmd.ExecuteScalar();
+
+                    if (creadorId == int.Parse(User.FindFirst("Id").Value))
+                    {
+                        SqlCommand reabrirCmd = new SqlCommand("ReabrirPregunta", connection);
+                        reabrirCmd.CommandType = CommandType.StoredProcedure;
+                        reabrirCmd.Parameters.AddWithValue("@PreguntaId", id);
+
+                        reabrirCmd.ExecuteNonQuery();
+                    }
+                    else
+                    {
+                        return Unauthorized();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+            return RedirectToAction("Index");
+        }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

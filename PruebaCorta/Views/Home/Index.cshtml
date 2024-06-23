@@ -38,9 +38,16 @@
                                 {
                                     <a class="btn btn-secondary me-2" href='@Url.Action("ResponderPregunta", "Home", new { id = pregunta.Id })'>Responder</a>
                                 }
-                                @if (pregunta.UsuarioId == int.Parse(User.FindFirst("Id").Value) && pregunta.Estatus == 1)
+                                @if (pregunta.UsuarioId == int.Parse(User.FindFirst("Id").Value))
                                 {
-                                    <a class="btn btn-danger" href='@Url.Action("CerrarPregunta", "Home", new { id = pregunta.Id })'>Cerrar</a>
+                                    @if (pregunta.Estatus == 1)
+                                    {
+                                        <a class="btn btn-danger me-2" href='@Url.Action("CerrarPregunta", "Home", new { id = pregunta.Id })'>Cerrar</a>
+                                    }
+                                    else
+                                    {
+                                        <a class="btn btn-success" href='@Url.Action("ReabrirPregunta", "Home", new { id = pregunta.Id })'>Abrir</a>
+                                    }
                                 }
                             </div>
                         </td>
